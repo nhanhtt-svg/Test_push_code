@@ -1,5 +1,6 @@
-import pytest
 from decimal import Decimal
+
+import pytest
 
 from apps.demo_yapf import Calculator, OrderItem, order_total
 

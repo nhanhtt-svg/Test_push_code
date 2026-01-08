@@ -8,7 +8,7 @@ import yaml
 
 
 def load_cfg(path: str) -> dict:
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         return yaml.safe_load(f) or {}
 
 
@@ -17,6 +17,7 @@ def is_ignored(relpath: str, ignore_patterns: list[str]) -> bool:
 
 
 class LoopDepthVisitor(ast.NodeVisitor):
+
     def __init__(self, include_while: bool):
         self.include_while = include_while
         self.depth = 0
@@ -56,8 +57,7 @@ def check_file(path: Path, max_depth: int, include_while: bool) -> list[str]:
     for lineno, depth in v.violations:
         if depth > max_depth:
             errors.append(
-                f"{path}:{lineno}: nested loop depth={depth} exceeds max_depth={max_depth}"
-            )
+                f"{path}:{lineno}: nested loop depth={depth} exceeds max_depth={max_depth}")
     return errors
 
 
@@ -86,7 +86,6 @@ def main(argv: list[str]) -> int:
     if all_errors:
         print("❌ custom rule failed: nested_loops")
         print("\n".join(all_errors))
-        print("\nHint: refactor by precomputing lookup dicts/sets, splitting functions, or reducing nesting.")
         return 1
     return 0
 

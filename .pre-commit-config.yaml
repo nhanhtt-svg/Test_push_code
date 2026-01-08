@@ -24,9 +24,13 @@ repos:
     hooks:
       - id: pylint
         args:
+          - "--init-hook=import sys; sys.path.insert(0, '.')"
           - "--disable=all"
           - "--enable=R1702,E,F"
           - "--max-nested-blocks=5"
+        additional_dependencies:
+          - pytest
+          - pyyaml
         exclude: ^(.*\/migrations\/|static\/|media\/|dist\/|build\/)
 
   # 4) Secret scan staged
