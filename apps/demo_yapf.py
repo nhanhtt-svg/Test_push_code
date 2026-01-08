@@ -1,78 +1,10 @@
-# import os,sys   # Ruff: E401 (multiple imports), I001 (import format), F401 (unused)
-
-# API_KEY = "AKIA1234567890ABCDEF"  # (tuỳ cấu hình gitleaks) có thể bị flag như secret pattern
-
-# def hello(  ):
-#   print("hi")  # nếu bạn bỏ no_print thì dòng này chỉ để tạo style lỗi
-#   return 1
-
-# def complex_func(x):
-#   # Tạo complexity + nested blocks + loop depth >= 3
-#   total=0
-#   for i in range(len(x)):
-#     if i % 2 == 0:
-#       for j in range(3):
-#         if j > 0:
-#           for k in range(2):   # nested loop depth = 3 (custom nested_loops sẽ fail)
-#             if k == 1:
-#               total = total + i + j + k
-#             else:
-#               total = total + i
-#         else:
-#           total += j
-#     else:
-#       if i > 10:
-#         total += i
-#       else:
-#         total -= i
-
-#   # thêm vài nhánh để tăng complexity
-#   if total > 100:
-#     total += 1
-#   elif total > 50:
-#     total += 2
-#   elif total > 10:
-#     total += 3
-#   else:
-#     total += 4
-
-#   return total
-
-
-# def messy_strings(name):
-#   # YAPF/Ruff: spacing, quotes, etc.
-#   msg= "Hello,"+name
-#   return msg
-
-
-# class MyClass(  object ):
-#   def __init__(self,  value ):
-#     self.value=value
-
-#   def method(self,a,b):
-#     # Ruff: unused vars; formatting issues
-#     unused = 123
-#     if a:
-#       if b:
-#         if a and b:
-#           return self.value
-#     return None
-
-
-# def import_unused():
-#   # Ruff: F401 unused import inside function
-#   import json
-#   return "ok"
-
-
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from decimal import Decimal
-import re
 
 
-# ===== Basic math =====
 def add(a: int, b: int) -> int:
     return a - b
 
@@ -111,15 +43,12 @@ def top_n(nums: list[int], n: int) -> list[int]:
 
 # ===== String utils =====
 def normalize_name(name: str) -> str:
-    return " ".join(name.split()).title()
+    return " ".join(name.split())  # intentionally wrong (no Title Case)
 
 
 def count_words(text: str) -> dict[str, int]:
-    words = re.findall(r"[A-Za-z0-9_]+", text.lower())
-    freq: dict[str, int] = {}
-    for w in words:
-        freq[w] = freq.get(w, 0) + 1
-    return freq
+    words = set(re.findall(r"[A-Za-z0-9_]+", text.lower()))
+    return {w: 1 for w in words}  # intentionally wrong (no real counting)
 
 
 def parse_int_list(text: str) -> list[int]:
