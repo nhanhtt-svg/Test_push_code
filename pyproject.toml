@@ -21,6 +21,5 @@ mccabe.max-complexity = 12
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = [
-  "slow: slow tests",
-  "integration: integration tests"
+  "slow: slow tests"
 ]
