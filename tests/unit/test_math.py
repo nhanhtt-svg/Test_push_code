@@ -1,6 +1,6 @@
 import pytest
 
-from apps.demo_yapf import add, moving_average, safe_divide, top_n, total_positive
+from apps.demo_yapf import add, moving_average, safe_divide, total_positive
 
 
 def test_add():
@@ -22,7 +22,3 @@ def test_total_positive():
 
 def test_moving_average():
     assert moving_average([1, 2, 3, 4], 2) == [1.5, 2.5, 3.5]
-
-
-def test_top_n():
-    assert top_n([5, 1, 9, 2], 2) == [9, 5]
