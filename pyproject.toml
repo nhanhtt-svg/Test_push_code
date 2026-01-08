@@ -1,0 +1,26 @@
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+extend-exclude = [
+  "**/migrations/**",
+  "static/**",
+  "media/**",
+  "dist/**",
+  "build/**",
+]
+
+[tool.ruff.format]
+# mặc định ok, có thể giữ trống
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "C90"]   # E/F: lỗi cơ bản, I: import, UP: pyupgrade, B: bugbear, C90: complexity
+ignore = []
+# Complexity gate (C901)
+mccabe.max-complexity = 12
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "slow: slow tests",
+  "integration: integration tests"
+]

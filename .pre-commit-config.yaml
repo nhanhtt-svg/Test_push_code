@@ -1,0 +1,67 @@
+default_stages: [pre-commit]
+
+repos:
+  # 1) Formatter check-only: YAPF
+  - repo: local
+    hooks:
+      - id: yapf-check
+        name: "yapf: check format (no auto-fix)"
+        entry: yapf --diff
+        language: python
+        additional_dependencies: ["yapf==0.43.0"]
+        types: [python]
+        exclude: ^(.*\/migrations\/|static\/|media\/|dist\/|build\/)
+
+  # 2) Linter: Ruff
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+
+  # 3) Logic basic: Pylint nested blocks
+  - repo: https://github.com/pycqa/pylint
+    rev: v3.2.7
+    hooks:
+      - id: pylint
+        args:
+          - "--disable=all"
+          - "--enable=R1702"
+          - "--max-nested-blocks=5"
+        exclude: ^(.*\/migrations\/|static\/|media\/|dist\/|build\/)
+
+  # 4) Secret scan staged
+  - repo: local
+    hooks:
+      - id: gitleaks-staged
+        name: "gitleaks (staged)"
+        entry: bash -lc "gitleaks protect --staged --redact --verbose"
+        language: system
+
+  # 5) Custom rules (team)
+  - repo: local
+    hooks:
+      - id: check-nested-loops
+        name: "custom: forbid nested loops depth >= 3"
+        entry: python tools/local-gate/check_nested_loops.py --config tools/local-gate/rules.yaml
+        language: python
+        additional_dependencies: ["pyyaml==6.0.2"]
+        types: [python]
+        exclude: ^(.*\/migrations\/|static\/|media\/|dist\/|build\/)
+
+      - id: check-no-print
+        name: "custom: forbid print()"
+        entry: python tools/local-gate/check_no_print.py --config tools/local-gate/rules.yaml
+        language: python
+        additional_dependencies: ["pyyaml==6.0.2"]
+        types: [python]
+        exclude: ^(.*\/migrations\/|static\/|media\/|dist\/|build\/)
+
+  # 6) Pre-push: run pytest (unit only)
+  - repo: local
+    hooks:
+      - id: pytest-pre-push
+        name: "pytest (unit) - pre-push gate"
+        entry: bash -lc "python3 -m pytest tests/unit -m 'not slow' -q --tb=short"
+        language: system
+        pass_filenames: false
+        stages: [pre-push]

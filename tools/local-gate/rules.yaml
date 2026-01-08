@@ -1,0 +1,16 @@
+ignore:
+  - "^tests/"
+  - "^.*\\/migrations\\/"
+  - "^static/"
+  - "^media/"
+  - "^dist/"
+  - "^build/"
+
+nested_loops:
+  max_depth: 2
+  include_while: true
+
+no_print:
+  enabled: true
+  allow_in:
+    - "^tests/"
