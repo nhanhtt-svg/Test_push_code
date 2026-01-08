@@ -8,7 +8,7 @@ import yaml
 
 
 def load_cfg(path: str) -> dict:
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         return yaml.safe_load(f) or {}
 
 
@@ -17,6 +17,7 @@ def is_match_any(path: str, patterns: list[str]) -> bool:
 
 
 class PrintCallVisitor(ast.NodeVisitor):
+
     def __init__(self):
         self.lines: list[int] = []
 

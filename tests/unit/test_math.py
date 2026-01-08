@@ -1,6 +1,6 @@
 import pytest
 
-from apps.demo_yapf import add, safe_divide, total_positive, moving_average, top_n
+from apps.demo_yapf import add, moving_average, safe_divide, top_n, total_positive
 
 
 def test_add():

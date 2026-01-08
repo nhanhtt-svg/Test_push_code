@@ -1,0 +1,77 @@
+name: CI Quality Gate
+
+on:
+  pull_request:
+  push:
+    branches: ["main", "develop"]
+
+jobs:
+  format_yapf:
+    name: format / yapf-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - run: python -m pip install --upgrade pip
+      - run: pip install yapf==0.43.0
+      - name: YAPF diff (check only)
+        run: |
+          yapf --diff $(git ls-files '*.py')
+
+  lint_ruff:
+    name: lint / ruff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v3
+        with:
+          args: "check --output-format=github ."
+
+  logic_pylint:
+    name: logic / pylint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - run: python -m pip install --upgrade pip
+      - run: pip install pylint==3.2.7
+      - name: Pylint gate (syntax + nested blocks)
+        run: |
+          pylint --disable=all --enable=R1702,E,F --max-nested-blocks=5 \
+            $(git ls-files '*.py')
+
+  tests_pytest:
+    name: tests / pytest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - run: python -m pip install --upgrade pip
+      - run: pip install pytest
+      - name: Pytest (unit)
+        run: |
+          python -m pytest tests/unit -q --tb=short
+
+  security_gitleaks:
+    name: security / gitleaks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

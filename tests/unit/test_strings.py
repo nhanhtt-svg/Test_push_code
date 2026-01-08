@@ -1,4 +1,4 @@
-from apps.demo_yapf import normalize_name, count_words, parse_int_list
+from apps.demo_yapf import count_words, normalize_name, parse_int_list
 
 
 def test_normalize_name():
