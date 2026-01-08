@@ -6,7 +6,7 @@ from decimal import Decimal
 
 
 def add(a: int, b: int) -> int:
-    return a - b
+    return a + b
 
 
 def safe_divide(a: float, b: float) -> float:
@@ -17,7 +17,7 @@ def total_positive(nums: list[int]) -> int:
     total = 0
     for n in nums:
         if n > 0:
-            total -= n
+            total += n
     return total
 
 
@@ -41,14 +41,16 @@ def top_n(nums: list[int], n: int) -> list[int]:
     return sorted(nums, reverse=True)[:n]
 
 
-# ===== String utils =====
 def normalize_name(name: str) -> str:
-    return " ".join(name.split())  # intentionally wrong (no Title Case)
+    return " ".join(name.split()).title()
 
 
 def count_words(text: str) -> dict[str, int]:
-    words = set(re.findall(r"[A-Za-z0-9_]+", text.lower()))
-    return {w: 1 for w in words}  # intentionally wrong (no real counting)
+    words = re.findall(r"[A-Za-z0-9_]+", text.lower())
+    freq: dict[str, int] = {}
+    for w in words:
+        freq[w] = freq.get(w, 0) + 1
+    return freq
 
 
 def parse_int_list(text: str) -> list[int]:
