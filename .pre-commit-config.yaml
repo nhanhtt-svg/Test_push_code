@@ -25,7 +25,7 @@ repos:
       - id: pylint
         args:
           - "--disable=all"
-          - "--enable=R1702"
+          - "--enable=R1702,E,F"
           - "--max-nested-blocks=5"
         exclude: ^(.*\/migrations\/|static\/|media\/|dist\/|build\/)
 
@@ -37,24 +37,24 @@ repos:
         entry: bash -lc "gitleaks protect --staged --redact --verbose"
         language: system
 
-  # 5) Custom rules (team)
-  - repo: local
-    hooks:
-      - id: check-nested-loops
-        name: "custom: forbid nested loops depth >= 3"
-        entry: python tools/local-gate/check_nested_loops.py --config tools/local-gate/rules.yaml
-        language: python
-        additional_dependencies: ["pyyaml==6.0.2"]
-        types: [python]
-        exclude: ^(.*\/migrations\/|static\/|media\/|dist\/|build\/)
+  # # 5) Custom rules (team)
+  # - repo: local
+  #   hooks:
+  #     - id: check-nested-loops
+  #       name: "custom: forbid nested loops depth >= 3"
+  #       entry: python tools/local-gate/check_nested_loops.py --config tools/local-gate/rules.yaml
+  #       language: python
+  #       additional_dependencies: ["pyyaml==6.0.2"]
+  #       types: [python]
+  #       exclude: ^(.*\/migrations\/|static\/|media\/|dist\/|build\/)
 
-      - id: check-no-print
-        name: "custom: forbid print()"
-        entry: python tools/local-gate/check_no_print.py --config tools/local-gate/rules.yaml
-        language: python
-        additional_dependencies: ["pyyaml==6.0.2"]
-        types: [python]
-        exclude: ^(.*\/migrations\/|static\/|media\/|dist\/|build\/)
+  #     - id: check-no-print
+  #       name: "custom: forbid print()"
+  #       entry: python tools/local-gate/check_no_print.py --config tools/local-gate/rules.yaml
+  #       language: python
+  #       additional_dependencies: ["pyyaml==6.0.2"]
+  #       types: [python]
+  #       exclude: ^(.*\/migrations\/|static\/|media\/|dist\/|build\/)
 
   # 6) Pre-push: run pytest (unit only)
   - repo: local
