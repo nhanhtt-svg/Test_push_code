@@ -37,12 +37,6 @@ def moving_average(nums: list[float], window: int) -> list[float]:
     return out
 
 
-def top_n(nums: list[int], n: int) -> list[int]:
-    if n <= 0:
-        return []
-    return sorted(nums, reverse=True)[:n]
-
-
 def normalize_name(name: str) -> str:
     return " ".join(name.split()).title()
 
