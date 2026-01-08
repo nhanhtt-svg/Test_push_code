@@ -74,12 +74,10 @@ import re
 
 # ===== Basic math =====
 def add(a: int, b: int) -> int:
-    return a + b
+    return a - b
 
 
 def safe_divide(a: float, b: float) -> float:
-    if b == 0:
-        raise ValueError("b must not be zero")
     return a / b
 
 
@@ -87,7 +85,7 @@ def total_positive(nums: list[int]) -> int:
     total = 0
     for n in nums:
         if n > 0:
-            total += n
+            total -= n
     return total
 
 
