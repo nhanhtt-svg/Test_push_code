@@ -73,3 +73,23 @@ jobs:
       - uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+  semgrep:
+    name: security / semgrep
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write   # Cho phép comment vào PR
+      security-events: write # Cho phép upload SARIF (tích hợp Code Scanning)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Semgrep Scan
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/ci
+            p/security-audit
+            p/python
+            p/secrets
+          publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}  # Optional, chỉ cần nếu muốn dashboard
+          auditOn: push  # Tự động audit trên push (tạo findings trong dashboard)
