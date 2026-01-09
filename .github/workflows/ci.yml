@@ -7,19 +7,17 @@ on:
 
 jobs:
   format_yapf:
-    name: format / yapf-check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
-      - run: python -m pip install --upgrade pip
-      - run: pip install yapf==0.43.0
-      - name: YAPF diff (check only)
-        run: |
-          yapf --diff $(git ls-files '*.py')
+  name: format / yapf-check
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Install yapf
+      run: pip install yapf==0.43.0
+    - name: Check formatting with yapf
+      run: yapf --diff --recursive . || (echo "Code not formatted. Run 'yapf -i .' to fix." && exit 1)
 
   lint_ruff:
     name: lint / ruff
@@ -31,20 +29,19 @@ jobs:
           args: "check --output-format=github ."
 
   logic_pylint:
-    name: logic / pylint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
-      - run: python -m pip install --upgrade pip
-      - run: pip install pylint==3.2.7
-      - name: Pylint gate (syntax + nested blocks)
-        run: |
-          pylint --disable=all --enable=R1702,E,F --max-nested-blocks=5 \
-            $(git ls-files '*.py')
+  name: logic / pylint
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - run: pip install pylint==3.2.7
+    - name: Pylint analysis
+      run: |
+        pylint --disable=all --enable=R1702,E,F --max-nested-blocks=5 \
+          --fail-under=10 --fail-on=R1702,E,F \
+          $(git ls-files '*.py') || exit 1
 
   tests_pytest:
     name: tests / pytest
