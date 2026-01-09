@@ -77,25 +77,11 @@ jobs:
   security_semgrep:
     name: security / semgrep
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-      security-events: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          fetch-depth: 0
-      
-      - name: Run Semgrep Scan
-        uses: returntocorp/semgrep-action@v1
-        with:
-          config: |
-            p/security-audit           # Chính sách bảo mật tổng quát
-            p/python                   # Rules Python cơ bản
-            p/secrets                  # Phát hiện secret key
-            p/python-flask             # THÊM CÁI NÀY - Flask-specific rules
-            r/python.lang.security     # THÊM CÁI NÀY - Security rules tổng quát
-            r/python.lang.correctness  # THÊM CÁI NÀY - Rules phát hiện lỗi logic
-          publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
-          severity: ERROR,WARNING
+          python-version: "3.11"
+          cache: "pip"
+      - run: python -m pip install --upgrade pip semgrep
+      - run: semgrep --config p/security-audit --config p/owasp-top-ten --error .
