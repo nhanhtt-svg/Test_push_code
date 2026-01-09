@@ -42,6 +42,7 @@ jobs:
           pylint --disable=all --enable=R1702,E,F --max-nested-blocks=5 \
             --fail-under=10 --fail-on=R1702,E,F \
             $(git ls-files '*.py') || exit 1
+      - run: pip install pylint==3.2.7 pytest pyyaml
 
   tests_pytest:
     name: tests / pytest
