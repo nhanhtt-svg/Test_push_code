@@ -23,3 +23,5 @@ testpaths = ["tests"]
 markers = [
   "slow: slow tests"
 ]
+[tool.poetry.dependencies]
+django = "2.2.10"
