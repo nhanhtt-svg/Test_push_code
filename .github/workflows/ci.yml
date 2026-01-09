@@ -79,17 +79,22 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: write   # Cho phép comment vào PR
-      security-events: write # Cho phép upload SARIF (tích hợp Code Scanning)
+      pull-requests: write
+      security-events: write
     steps:
-      - uses: actions/checkout@v4
-      - name: Semgrep Scan
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Run Semgrep Scan
         uses: returntocorp/semgrep-action@v1
         with:
-          config: >-
+          config: |
             p/ci
             p/security-audit
             p/python
             p/secrets
-          publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}  # Optional, chỉ cần nếu muốn dashboard
-          auditOn: push  # Tự động audit trên push (tạo findings trong dashboard)
+          publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
+          auditOn: push
+          severity: high
