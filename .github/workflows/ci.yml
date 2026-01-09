@@ -75,7 +75,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
   security_semgrep:
-    name: security / semgrep  # Đây mới là job name đúng
+    name: security / semgrep
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -91,10 +91,11 @@ jobs:
         uses: returntocorp/semgrep-action@v1
         with:
           config: |
-            p/ci
-            p/security-audit
-            p/python
-            p/secrets
+            p/security-audit           # Chính sách bảo mật tổng quát
+            p/python                   # Rules Python cơ bản
+            p/secrets                  # Phát hiện secret key
+            p/python-flask             # THÊM CÁI NÀY - Flask-specific rules
+            r/python.lang.security     # THÊM CÁI NÀY - Security rules tổng quát
+            r/python.lang.correctness  # THÊM CÁI NÀY - Rules phát hiện lỗi logic
           publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
-          auditOn: push
-          severity: high
+          severity: ERROR,WARNING
