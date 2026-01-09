@@ -74,8 +74,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
-  semgrep:
-    name: security / semgrep
+  security_semgrep:
+    name: security / semgrep  # Đây mới là job name đúng
     runs-on: ubuntu-latest
     permissions:
       contents: read
