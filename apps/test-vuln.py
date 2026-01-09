@@ -1,14 +1,26 @@
-# Ví dụ lỗ hổng: Hard-coded secret (API key)
+# test_codeql_vuln.py - Ví dụ gây fail chắc chắn
+
+# 1. SQL injection rõ ràng với user input (Flask ví dụ)
+from flask import Flask, request
+import sqlite3
+
+app = Flask(__name__)
+
+@app.route('/user')
+def get_user():
+    user_id = request.args.get('id')  # User-controlled input
+    conn = sqlite3.connect(':memory:')
+    cursor = conn.cursor()
+    query = f"SELECT * FROM users WHERE id = {user_id}"  # f-string injection
+    cursor.execute(query)  # Sink rõ ràng
+    return "Done"
+
+# 2. Unsafe deserialization với remote input
 import pickle
-API_KEY = "sk_live_1234567890abcdef"  # CodeQL sẽ flag là "Hard-coded credentials"
+from flask import request
 
-# Hoặc lỗ hổng SQL injection
-
-
-def get_user(user_id):
-    query = f"SELECT * FROM users WHERE id = {user_id}"
-    cursor.execute(query)  # CodeQL flag "SQL injection"
-
-
-# Hoặc unsafe deserialization
-pickle.loads(user_input)  # CodeQL flag "Unsafe deserialization"
+@app.route('/load')
+def load_pickle():
+    data = request.data  # User-controlled bytes
+    obj = pickle.loads(data)  # Unsafe sink với remote source
+    return str(obj)
