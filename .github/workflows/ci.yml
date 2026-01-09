@@ -36,13 +36,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install pylint==3.2.7
+      - run: python -m pip install --upgrade pip
+      - run: pip install pylint==3.2.7 pytest pyyaml
       - name: Pylint analysis
         run: |
           pylint --disable=all --enable=R1702,E,F --max-nested-blocks=5 \
             --fail-under=10 --fail-on=R1702,E,F \
             $(git ls-files '*.py') || exit 1
-      - run: pip install pylint==3.2.7 pytest pyyaml
+      
 
   tests_pytest:
     name: tests / pytest
