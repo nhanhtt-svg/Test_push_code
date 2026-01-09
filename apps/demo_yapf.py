@@ -11,7 +11,7 @@ def add(a: int, b: int) -> int:
 
 def safe_divide(a: float, b: float) -> float:
     if b == 0:
-        raise ValueError("Division by zero")
+        raise ValueError("Division by zerorrrg")
     return a / b
 
 

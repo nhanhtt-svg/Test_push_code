@@ -1,4 +1,4 @@
-name: CI Quality Gate
+name: Quality Gate CI
 
 on:
   pull_request:
@@ -14,12 +14,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip"
-      - run: python -m pip install --upgrade pip
-      - run: pip install yapf==0.43.0
-      - name: YAPF diff (check only)
-        run: |
-          yapf --diff $(git ls-files '*.py')
+      - name: Install yapf
+        run: pip install yapf==0.43.0
+      - name: Check formatting with yapf
+        run: yapf --diff --recursive . || (echo "Code not formatted. Run 'yapf -i .' to fix." && exit 1)
 
   lint_ruff:
     name: lint / ruff
@@ -38,13 +36,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip"
       - run: python -m pip install --upgrade pip
-      - run: pip install pylint==3.2.7
-      - name: Pylint gate (syntax + nested blocks)
+      - run: pip install pylint==3.2.7 pytest pyyaml
+      - name: Pylint analysis
         run: |
           pylint --disable=all --enable=R1702,E,F --max-nested-blocks=5 \
-            $(git ls-files '*.py')
+            --fail-under=10 --fail-on=R1702,E,F \
+            $(git ls-files '*.py') || exit 1
+      
 
   tests_pytest:
     name: tests / pytest
@@ -74,4 +73,3 @@ jobs:
       - uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
