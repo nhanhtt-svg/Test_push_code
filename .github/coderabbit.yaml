@@ -46,11 +46,11 @@ checks:
 
 # Path filters (không review những path này)
 path_filters:
-  - "! **/*.md"  # Skip markdown files
+  - "!**/*.md"  # Skip markdown files
   - "!**/package-lock.json"
   - "!**/yarn.lock"
-  - "! **/*. min.js"
-  - "! dist/**"
+  - "!**/*.min.js"
+  - "!dist/**"
   - "!build/**"
   - "!node_modules/**"
 
