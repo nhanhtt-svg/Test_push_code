@@ -1,0 +1,92 @@
+# .coderabbit.yaml (hoặc .github/coderabbit.yaml)
+
+# Language & framework
+language: "en"  # Review comments in English
+early_access: false
+enable_free_tier: true  # For public repos
+
+# Review settings
+reviews:
+  # Profile:  chill (ít comment) or assertive (nhiều comment)
+  profile: "assertive"
+  
+  # Request changes nếu có critical issues
+  request_changes_workflow: true
+  
+  # High-level summary của PR
+  high_level_summary: true
+  
+  # Auto-review khi PR được update
+  auto_review: 
+    enabled: true
+    drafts: false  # Không review draft PRs
+  
+  # Poem mode (fun feature - AI viết poem về PR 😄)
+  poem: true
+
+# Review focus areas
+checks:
+  # Security issues (critical)
+  - security
+  
+  # Performance issues
+  - performance
+  
+  # Best practices
+  - best-practices
+  
+  # Code smells
+  - code-smells
+  
+  # Test coverage
+  - test-coverage
+  
+  # Documentation
+  - documentation
+
+# Path filters (không review những path này)
+path_filters:
+  - "! **/*.md"  # Skip markdown files
+  - "!**/package-lock.json"
+  - "!**/yarn.lock"
+  - "! **/*. min.js"
+  - "! dist/**"
+  - "!build/**"
+  - "!node_modules/**"
+
+# Instructions cho AI
+custom_instructions: |
+  ## Project Context
+  This is a Python web application using FastAPI. 
+  
+  ## Priority
+  Focus on security and performance issues first.
+  
+  ## Coding Standards
+  - Follow PEP 8
+  - Use type hints
+  - Add docstrings for all public functions
+  - Max line length:  100
+  - Use async/await for I/O operations
+  
+  ## Critical Rules
+  - Never approve code with SQL injection vulnerabilities
+  - Flag any hardcoded secrets as ERROR
+  - Require error handling for all external API calls
+  - Require tests for new features
+
+# Chat settings
+chat:
+  # Allow developers to ask questions
+  enabled: true
+  
+# Labels to auto-add
+labels:
+  - coderabbit
+
+# Integrations
+integrations:
+  # Slack notifications (optional)
+  slack:
+    enabled: false
+
