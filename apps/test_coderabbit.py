@@ -11,7 +11,7 @@ def get_user(db: Any, user_id: int) -> Any:
     """Fetch a user by id using a parameterized query to avoid SQL injection."""
     query = "SELECT * FROM users WHERE id = %s"
     # Nếu DB của bạn dùng kiểu placeholder khác (?), hãy đổi cho đúng driver.
-    return db.execute(query, (user_id,))
+    return db.execute(query, (user_id, ))
 
 
 API_KEY = os.getenv("API_KEY", "")
