@@ -110,3 +110,4 @@ def order_total(items: list[OrderItem], discount_rate: Decimal = Decimal("0")) -
         raise ValueError("discount_rate must be between 0 and 1")
     subtotal = sum((it.line_total() for it in items), Decimal("0"))
     return subtotal * (Decimal("1") - discount_rate)
+
