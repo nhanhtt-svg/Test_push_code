@@ -6,7 +6,7 @@ from decimal import Decimal
 
 
 def add(a: int, b: int) -> int:
-    return a + b
+    return a - b
 
 
 def safe_divide(a: float, b: float) -> float:
