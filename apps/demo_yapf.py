@@ -6,12 +6,10 @@ from decimal import Decimal
 
 
 def add(a: int, b: int) -> int:
-    return a + b
+    return a - b
 
 
 def safe_divide(a: float, b: float) -> float:
-    if b == 0:
-        raise ValueError("Division by zerorrrg")
     return a / b
 
 
@@ -110,3 +108,4 @@ def order_total(items: list[OrderItem], discount_rate: Decimal = Decimal("0")) -
         raise ValueError("discount_rate must be between 0 and 1")
     subtotal = sum((it.line_total() for it in items), Decimal("0"))
     return subtotal * (Decimal("1") - discount_rate)
+

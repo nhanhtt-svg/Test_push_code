@@ -60,12 +60,11 @@ repos:
   #       types: [python]
   #       exclude: ^(.*\/migrations\/|static\/|media\/|dist\/|build\/)
 
-  # 6) Pre-push: run pytest (unit only)
   - repo: local
     hooks:
       - id: pytest-pre-push
         name: "pytest (unit) - pre-push gate"
-        entry: bash -lc "python3 -m pytest tests/unit -m 'not slow' -q --tb=short"
+        entry: bash .git-hooks/pre-push-pytest.sh  # Đường dẫn đến script
         language: system
         pass_filenames: false
         stages: [pre-push]
